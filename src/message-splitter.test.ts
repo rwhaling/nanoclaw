@@ -109,7 +109,10 @@ describe('splitMessage', () => {
 
   it('handles real-world agent output with prose and code', () => {
     const prose = 'Here is the implementation:\n\n';
-    const code = '```python\n' + '    def method(self):\n        pass\n'.repeat(80) + '```\n';
+    const code =
+      '```python\n' +
+      '    def method(self):\n        pass\n'.repeat(80) +
+      '```\n';
     const outro = '\nLet me know if you have questions!';
     const text = prose + code + outro;
     const chunks = splitMessage(text);
