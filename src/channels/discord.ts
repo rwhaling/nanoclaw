@@ -193,14 +193,11 @@ export class DiscordChannel implements Channel {
 
       const textChannel = channel as TextChannel;
 
-      // Discord has a 2000 character limit per message — split if needed
-      const MAX_LENGTH = 2000;
-      if (text.length <= MAX_LENGTH) {
-        await textChannel.send(text);
-      } else {
-        for (let i = 0; i < text.length; i += MAX_LENGTH) {
-          await textChannel.send(text.slice(i, i + MAX_LENGTH));
-        }
+      // Discord has a 2000 character limit — split preserving markdown fences
+      const { splitMessage } = await import('../message-splitter.js');
+      const chunks = splitMessage(text);
+      for (const chunk of chunks) {
+        await textChannel.send(chunk);
       }
       logger.info({ jid, length: text.length }, 'Discord message sent');
     } catch (err) {
